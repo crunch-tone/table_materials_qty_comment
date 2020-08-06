@@ -137,7 +137,7 @@ function getData() {
     }
     finalData.push(resultObj);
   }
-  console.log(finalData);
+  //console.log(finalData);
   return JSON.stringify(finalData);
 }
 
@@ -146,6 +146,8 @@ function sendData() {
   xhr.open("POST", "http://localhost:3000/shipmentbysap", true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(getData());
+  resetForms();
+  addForm();
 }
 
 //let's go
