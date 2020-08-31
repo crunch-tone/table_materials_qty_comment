@@ -162,7 +162,7 @@ function sendData() {
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(getData());
 
-  xhttp.onreadystatechange = function () {
+  xhr.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       console.log("данные получены и обработаны");
     }
