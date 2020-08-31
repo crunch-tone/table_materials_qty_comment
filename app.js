@@ -103,7 +103,7 @@ function resetForms() {
     mainDiv.removeChild(mainDiv.firstChild);
   }
   finalData = [];
-  console.clear();
+  //console.clear();
 }
 
 function canShowAddButton() {
@@ -122,22 +122,37 @@ function canShowDeleteButton() {
   }
 }
 
+//function checkData() {}
+
 function getData() {
   var usedRows = rowsAmount - formAllowedIdsArr.length;
+  var invalidResult = false;
   for (i = 0; i < usedRows; i++) {
     var resultObj = {};
     for (j = 0; j < mainDiv.childNodes[i].childNodes.length - 1; j++) {
       var resultValue = mainDiv.childNodes[i].childNodes[j].value;
       var prop = formElementsIds[j];
-      if (prop == "comment") {
-        resultObj[`${prop}`] = resultValue;
-      } else {
+      /*if (prop == "qty") {
         resultObj[`${prop}`] = parseInt(resultValue);
-      }
+      } else {
+        resultObj[`${prop}`] = resultValue;
+      }*/
+      resultObj[`${prop}`] = resultValue;
     }
-    finalData.push(resultObj);
+    var validMaterial = /31\d{1,5}/;
+
+    if (
+      !validMaterial.test(resultObj["material"]) ||
+      parseInt(resultObj["qty"]) < 0 ||
+      resultObj["comment"] == ""
+    ) {
+      invalidResult = true;
+    } else {
+      resultObj["qty"] = parseInt(resultObj["qty"]);
+      finalData.push(resultObj);
+    }
   }
-  //console.log(finalData);
+  console.log(finalData);
   return JSON.stringify(finalData);
 }
 
@@ -146,6 +161,13 @@ function sendData() {
   xhr.open("POST", "http://localhost:3000/shipmentbysap", true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(getData());
+
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log("данные получены и обработаны");
+    }
+  };
+
   resetForms();
   addForm();
 }
