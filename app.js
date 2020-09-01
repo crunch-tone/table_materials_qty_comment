@@ -156,6 +156,20 @@ function getData() {
   return JSON.stringify(finalData);
 }
 
+function drawErrorMessage() {
+  var errorMessage = document.createElement("div");
+  errorMessage.id = "error-message";
+  errorMessage.innerHTML = "Ошибка при передаче данных";
+  mainDiv.appendChild(errorMessage);
+}
+
+function drawSuccessMessage() {
+  var successMessage = document.createElement("div");
+  successMessage.id = "success-message";
+  successMessage.innerHTML = "Данные переданы успешно";
+  mainDiv.appendChild(successMessage);
+}
+
 function sendData() {
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://localhost:3000/shipmentbysap", true);
@@ -164,12 +178,14 @@ function sendData() {
 
   xhr.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      console.log("данные получены и обработаны");
+      drawSuccessMessage();
+    } else {
+      drawErrorMessage();
     }
   };
 
-  resetForms();
-  addForm();
+  //resetForms();
+  //addForm();
 }
 
 //let's go
